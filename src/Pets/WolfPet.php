@@ -31,8 +31,7 @@ class WolfPet extends Pets {
 	 *
 	 * @return string The pet name
 	 */
-	public function getName() {
-		return "WolfPet";
+	public function getName(): string{
 	}
 
 	/**
@@ -40,8 +39,8 @@ class WolfPet extends Pets {
 	 *
 	 * @return integer The speed of the pet
 	 */
-	public function getSpeed() {
-		return 1.2;
+	public function getSpeed() : void{
+		return;
 	}
 
 }

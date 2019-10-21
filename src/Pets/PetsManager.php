@@ -22,7 +22,7 @@ class PetsManager implements Listener {
 	 *
 	 * @param LBPets\Main $plugin The main plugin
 	 */
-	public function __construct($plugin) {
+	public function __construct($plugin){
 		$server = Server::getInstance();
 
 		Entity::registerEntity(ChickenPet::class);

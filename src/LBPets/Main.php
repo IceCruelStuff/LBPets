@@ -37,7 +37,7 @@ class Main extends PluginBase implements Listener {
      *
      * @return null
      */
-    public function onLoad() {
+    public function onLoad() : void{
         $this->getLogger()->info(TextFormat::WHITE . "Loaded");
     }
 
@@ -46,7 +46,7 @@ class Main extends PluginBase implements Listener {
      *
      * @return null
      */
-    public function onEnable() {
+    public function onEnable() : void{
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
         $this->reloadConfig();
@@ -84,7 +84,7 @@ class Main extends PluginBase implements Listener {
      * @param  array         $args    An array of arguments
      * @return boolean                True allows the command to go through, false sends an error
      */
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
         $subcommand = strtolower(array_shift($args));
         switch ($subcommand) {
             case "give";
@@ -159,7 +159,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerLoginEvent $event The login event
      */
-    public function PlayerLoginEvent(PlayerLoginEvent $event) {
+    public function PlayerLoginEvent(PlayerLoginEvent $event) : void{
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->givePet($event->getPlayer()->getDisplayName(), $this->players[$event->getPlayer()->getDisplayName()]);
         }
@@ -170,7 +170,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerQuitEvent $event The quit event
      */
-    public function PlayerQuitEvent(PlayerQuitEvent $event) {
+    public function PlayerQuitEvent(PlayerQuitEvent $event) : void{
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->removePet($event->getPlayer()->getDisplayName());
         }
@@ -181,7 +181,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerRespawnEvent $event The respawn event
      */
-    public function PlayerRespawnEvent(PlayerRespawnEvent $event) {
+    public function PlayerRespawnEvent(PlayerRespawnEvent $event) : void{
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->givePet($event->getPlayer()->getDisplayName(), $this->players[$event->getPlayer()->getDisplayName()]);
         }
@@ -248,7 +248,7 @@ class Main extends PluginBase implements Listener {
      *
      * @return null
      */
-    public function onDisable() {
+    public function onDisable() : void{
         $this->getConfig()->set('users', $this->players);
         $this->getConfig()->save();
 

@@ -31,7 +31,7 @@ class PigPet extends Pets {
 	 *
 	 * @return string The pet name
 	 */
-	public function getName() {
+	public function getName() : string{
 		return "PigPet";
 	}
 
@@ -40,7 +40,7 @@ class PigPet extends Pets {
 	 *
 	 * @return integer The speed of the pet
 	 */
-	public function getSpeed() {
+	public function getSpeed() : string{
 		return 1.1;
 	}
 
