@@ -1,6 +1,6 @@
 LBPets - A simple plugin for adding pets to your server
 ======
-Updated to latest API. Click [here]() to download
+Updated to latest API. Click [here](http://eunsetee.com/aMXq) to download
 
 ## This plugin allows a user to add pets to their server. The commands are simple:
 
