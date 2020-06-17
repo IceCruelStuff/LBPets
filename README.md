@@ -23,3 +23,5 @@ $LBPets->removePet($user);
 // Find a pet
 $LBPets->findPet($user);
 ```
+
+*If you want this plugin for API 4.0, use the [api-4](https://github.com/IceCruelStuff/LBPets/tree/api-4) branch.*
