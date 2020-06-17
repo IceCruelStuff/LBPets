@@ -22,10 +22,11 @@ class PetsManager implements Listener {
 	 *
 	 * @param LBPets\Main $plugin The main plugin
 	 */
-	public function __construct($plugin){
+	public function __construct($plugin) {
 		$server = Server::getInstance();
 
 		Entity::registerEntity(ChickenPet::class);
+		Entity::registerEntity(OcelotPet::class);
 		Entity::registerEntity(WolfPet::class);
 		Entity::registerEntity(PigPet::class);
 	}
@@ -46,16 +47,16 @@ class PetsManager implements Listener {
 				new DoubleTag("", $source->x),
 				new DoubleTag("", $source->y),
 				new DoubleTag("", $source->z)
-					]),
+			]),
 			"Motion" => new Enum("Motion", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
 				new DoubleTag("", 0)
-					]),
+			]),
 			"Rotation" => new Enum("Rotation", [
 				new FloatTag("", $source instanceof Location ? $source->yaw : 0),
 				new FloatTag("", $source instanceof Location ? $source->pitch : 0)
-					]),
+			]),
 		]);
 		return Entity::createEntity($type, $chunk, $nbt, ...$args);
 	}
@@ -76,13 +77,13 @@ class PetsManager implements Listener {
 
 		$source = new Position($x , $y + 2, $z, $player->getLevel());
 		if (empty($type)) {
-			$pets = array("ChickenPet", "PigPet", "WolfPet");
+			$pets = array("ChickenPet", "OcelotPet", "PigPet", "WolfPet");
 			$type = $pets[rand(0, 2)];
 		}
 		if (!empty($holdType)) {
-			$pets = array("ChickenPet", "PigPet", "WolfPet");
+			$pets = array("ChickenPet", "OcelotPet", "PigPet", "WolfPet");
 			foreach ($pets as $key => $petType) {
-				if($petType == $holdType) {
+				if ($petType == $holdType) {
 					unset($pets[$key]);
 					break;
 				}
@@ -95,4 +96,5 @@ class PetsManager implements Listener {
 
 		return $pet;
 	}
+
 }
