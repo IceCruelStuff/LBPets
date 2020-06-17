@@ -9,7 +9,7 @@ use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\block\Liquid;
 use pocketmine\entity\Creature;
-use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\network\mcpe\protocol\AddEntityPacket;
 
 /**
  * The main class for a pet
@@ -42,7 +42,7 @@ abstract class Pets extends Creature {
 	 *
 	 * @param Player $player The player to set the player for
 	 */
-	public function setOwner(Player $player) : void{
+	public function setOwner(Player $player) {
 		$this->owner = $player;
 	}
 
@@ -52,8 +52,8 @@ abstract class Pets extends Creature {
 	 * @param  Player $player The player to spawn to
 	 * @return null
 	 */
-	public function spawnTo(Player $player) : void{
-		if(!$this->closed && $player->spawned && $player->dead !== true) {
+	public function spawnTo(Player $player) : void {
+		if (!$this->closed && $player->spawned && $player->dead !== true) {
 			if (!isset($this->hasSpawned[$player->getId()]) && isset($player->usedChunks[Level::chunkHash($this->chunk->getX(), $this->chunk->getZ())])) {
 				$pk = new AddEntityPacket();
 				$pk->eid = $this->getID();
@@ -80,7 +80,13 @@ abstract class Pets extends Creature {
 	 * @return null
 	 */
 	public function updateMovement(bool $teleport = false): void{
-		if ($this->lastX !== $this->x || $this->lastY !== $this->y || $this->lastZ !== $this->z || $this->lastYaw !== $this->yaw || $this->lastPitch !== $this->pitch) {
+		if (
+			$this->lastX !== $this->x ||
+			$this->lastY !== $this->y ||
+			$this->lastZ !== $this->z ||
+			$this->lastYaw !== $this->yaw ||
+			$this->lastPitch !== $this->pitch
+		) {
 			$this->lastX = $this->x;
 			$this->lastY = $this->y;
 			$this->lastZ = $this->z;
@@ -88,7 +94,15 @@ abstract class Pets extends Creature {
 			$this->lastPitch = $this->pitch;
 		}
 
-		$this->level->addEntityMovement($this->getViewers(), $this->getId(), $this->x, $this->y, $this->z, $this->yaw, $this->pitch);
+		$this->level->addEntityMovement(
+			$this->getViewers(),
+			$this->getId(),
+			$this->x,
+			$this->y,
+			$this->z,
+			$this->yaw,
+			$this->pitch
+		);
 	}
 
 	/**
@@ -103,7 +117,11 @@ abstract class Pets extends Creature {
 		$this->boundingBox->offset($dx, 0, 0);
 		$this->boundingBox->offset(0, 0, $dz);
 		$this->boundingBox->offset(0, $dy, 0);
-		$this->setComponents($this->x + $dx, $this->y + $dy, $this->z + $dz);
+		$this->setComponents(
+			$this->x + $dx,
+			$this->y + $dy,
+			$this->z + $dz
+		);
 
 	}
 
@@ -122,7 +140,7 @@ abstract class Pets extends Creature {
 	 * @return null
 	 */
 	public function updateMove() : void{
-		if(is_null($this->closeTarget)) {
+		if (is_null($this->closeTarget)) {
 			$x = $this->owner->x - $this->x;
 			$z = $this->owner->z - $this->z;
 		} else {
@@ -143,7 +161,7 @@ abstract class Pets extends Creature {
 			$this->motionZ = $this->getSpeed() * 0.15 * ($z / $diff);
 		}
 		$this->yaw = -atan2($this->motionX, $this->motionZ) * 180 / M_PI;
-		if(is_null($this->closeTarget)) {
+		if (is_null($this->closeTarget)) {
 			$y = $this->owner->y - $this->y;
 		} else {
 			$y = $this->closeTarget->y - $this->y;
@@ -158,7 +176,7 @@ abstract class Pets extends Creature {
 			$block = $this->level->getBlock(new Vector3($newX, Math::floorFloat($this->y + 1), $newZ));
 			if (!($block instanceof Air) && !($block instanceof Liquid)) {
 				$this->motionY = 0;
-				if(is_null($this->closeTarget)) {
+				if (is_null($this->closeTarget)) {
 					$this->returnToOwner();
 					return;
 				}
@@ -193,12 +211,12 @@ abstract class Pets extends Creature {
 	 * @param  integer $currentTick The current tick
 	 * @return boolean              Whether or not the update was true
 	 */
-	public function onUpdate(int $currentTick): bool{
-		if(!($this->owner instanceof Player) || $this->owner->closed) {
+	public function onUpdate(int $currentTick) : bool {
+		if (!($this->owner instanceof Player) || $this->owner->closed) {
 			$this->fastClose();
 			return false;
 		}
-		if($this->closed){
+		if ($this->closed){
 			return false;
 		}
 		$tickDiff = $currentTick - $this->lastUpdate;
@@ -218,7 +236,7 @@ abstract class Pets extends Creature {
 	 *
 	 * @return null
 	 */
-	public function returnToOwner() : void{
+	public function returnToOwner() {
 		$len = rand(2, 6);
 		$x = (-sin(deg2rad( $this->owner->yaw))) * $len  +  $this->owner->getX();
 		$z = cos(deg2rad( $this->owner->yaw)) * $len  +  $this->owner->getZ();
@@ -232,7 +250,7 @@ abstract class Pets extends Creature {
 	 *
 	 * @return null
 	 */
-	public function fastClose() : void{
+	public function fastClose() {
 		parent::close();
 	}
 
@@ -242,11 +260,11 @@ abstract class Pets extends Creature {
 	 * @return null
 	 */
 	public function close() : void{
-		if(!($this->owner instanceof Player) || $this->owner->closed) {
+		if (!($this->owner instanceof Player) || $this->owner->closed) {
 			$this->fastClose();
 			return;
 		}
-		if(is_null($this->closeTarget)) {
+		if (is_null($this->closeTarget)) {
 			$len = rand(12, 15);
 			$x = (-sin(deg2rad( $this->owner->yaw + 20))) * $len  +  $this->owner->getX();
 			$z = cos(deg2rad( $this->owner->yaw + 20)) * $len  +  $this->owner->getZ();
@@ -260,7 +278,7 @@ abstract class Pets extends Creature {
 	 * @param  string $started The started time
 	 * @return integer         The time value
 	 */
-	public static function getTimeInterval($started){
+	public static function getTimeInterval($started) {
 		return round((strtotime(date('Y-m-d H:i:s')) - strtotime($started)) /60);
 	}
 
