@@ -159,7 +159,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerLoginEvent $event The login event
      */
-    public function PlayerLoginEvent(PlayerLoginEvent $event) : void {
+    public function PlayerLoginEvent(PlayerLoginEvent $event) {
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->givePet($event->getPlayer()->getDisplayName(), $this->players[$event->getPlayer()->getDisplayName()]);
         }
@@ -170,7 +170,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerQuitEvent $event The quit event
      */
-    public function PlayerQuitEvent(PlayerQuitEvent $event) : void {
+    public function PlayerQuitEvent(PlayerQuitEvent $event) {
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->removePet($event->getPlayer()->getDisplayName());
         }
@@ -181,7 +181,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerRespawnEvent $event The respawn event
      */
-    public function PlayerRespawnEvent(PlayerRespawnEvent $event) : void {
+    public function PlayerRespawnEvent(PlayerRespawnEvent $event) {
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->givePet($event->getPlayer()->getDisplayName(), $this->players[$event->getPlayer()->getDisplayName()]);
         }
