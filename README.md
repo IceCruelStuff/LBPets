@@ -1,6 +1,5 @@
 LBPets - A simple plugin for adding pets to your server
 ======
-Updated to latest API. Click [here](http://eunsetee.com/aMXq) to download
 
 ## This plugin allows a user to add pets to their server. The commands are simple:
 
@@ -12,7 +11,7 @@ Updated to latest API. Click [here](http://eunsetee.com/aMXq) to download
 
 ## The plugin can also be accessed by its API
 
-```
+```php
 $LBPets = Server::getInstance()->getPluginManager()->getPlugin('LBPets');
 
 // Give a pet
