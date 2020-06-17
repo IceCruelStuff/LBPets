@@ -37,7 +37,7 @@ class Main extends PluginBase implements Listener {
      *
      * @return null
      */
-    public function onLoad() : void{
+    public function onLoad() : void {
         $this->getLogger()->info(TextFormat::WHITE . "Loaded");
     }
 
@@ -46,7 +46,7 @@ class Main extends PluginBase implements Listener {
      *
      * @return null
      */
-    public function onEnable() : void{
+    public function onEnable() : void {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
         $this->reloadConfig();
@@ -54,7 +54,7 @@ class Main extends PluginBase implements Listener {
         /**
          * Disable the plugin if it's disabled in the plugin
          */
-        if($this->getConfig()->get('pets') == false) {
+        if ($this->getConfig()->get('pets') == false) {
             $this->setEnabled(false);
             return;
         }
@@ -68,7 +68,7 @@ class Main extends PluginBase implements Listener {
         /**
          * Load users that have a pet from the config
          */
-        foreach($this->getConfig()->get('users') as $user => $pet) {
+        foreach ($this->getConfig()->get('users') as $user => $pet) {
             $this->players[$user] = $pet;
         }
 
@@ -84,11 +84,11 @@ class Main extends PluginBase implements Listener {
      * @param  array         $args    An array of arguments
      * @return boolean                True allows the command to go through, false sends an error
      */
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
         $subcommand = strtolower(array_shift($args));
         switch ($subcommand) {
-            case "give";
-                if(count($args) < 1){
+            case "give":
+                if (count($args) < 1) {
                     array_unshift($args, $sender->getDisplayName());
                 }
 
@@ -96,7 +96,7 @@ class Main extends PluginBase implements Listener {
                  * Check perms, then give pet
                  */
                 if (!$this->getConfig()->get('onlyOp') || $sender->hasPermission("lbpets")) {
-                    if($this->givePet(...$args)) {
+                    if ($this->givePet(...$args)) {
                         $sender->sendMessage(TextFormat::BLUE . '[LBPets] ' . $args[0] . ' has a new pet!');
                     } else {
                         $sender->sendMessage(TextFormat::RED . '[LBPets] Unable to give ' . $args[0] . ' a new pet!');
@@ -107,7 +107,7 @@ class Main extends PluginBase implements Listener {
                 $sender->sendMessage(TextFormat::RED . "[LBPets] You don't have permissions to do that...");
                 return true;
             case "remove":
-                if(count($args) < 1){
+                if (count($args) < 1) {
                     array_unshift($args, $sender->getDisplayName());
                 }
 
@@ -127,7 +127,7 @@ class Main extends PluginBase implements Listener {
                 $sender->sendMessage(TextFormat::RED . "[LBPets] You don't have permissions to do that...");
                 return true;
             case "find":
-                if(count($args) < 1){
+                if (count($args) < 1) {
                     array_unshift($args, $sender->getDisplayName());
                 }
 
@@ -159,7 +159,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerLoginEvent $event The login event
      */
-    public function PlayerLoginEvent(PlayerLoginEvent $event) : void{
+    public function PlayerLoginEvent(PlayerLoginEvent $event) : void {
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->givePet($event->getPlayer()->getDisplayName(), $this->players[$event->getPlayer()->getDisplayName()]);
         }
@@ -170,7 +170,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerQuitEvent $event The quit event
      */
-    public function PlayerQuitEvent(PlayerQuitEvent $event) : void{
+    public function PlayerQuitEvent(PlayerQuitEvent $event) : void {
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->removePet($event->getPlayer()->getDisplayName());
         }
@@ -181,7 +181,7 @@ class Main extends PluginBase implements Listener {
      *
      * @param PlayerRespawnEvent $event The respawn event
      */
-    public function PlayerRespawnEvent(PlayerRespawnEvent $event) : void{
+    public function PlayerRespawnEvent(PlayerRespawnEvent $event) : void {
         if (isset($this->players[$event->getPlayer()->getDisplayName()])) {
             $this->givePet($event->getPlayer()->getDisplayName(), $this->players[$event->getPlayer()->getDisplayName()]);
         }
@@ -195,8 +195,8 @@ class Main extends PluginBase implements Listener {
      * @return boolean          Whether or not giving the pet was successful
      */
     public function givePet($user = '', $pet = '') {
-        if(($player = $this->getServer()->getPlayerExact($user)) instanceof Player) {
-            if(!isset($this->pets[$player->getDisplayName()])) {
+        if (($player = $this->getServer()->getPlayerExact($user)) instanceof Player) {
+            if (!isset($this->pets[$player->getDisplayName()])) {
                 $this->pets[$player->getDisplayName()] = PetsManager::createPet($player, $pet);
                 $this->pets[$player->getDisplayName()]->returnToOwner();
                 $this->players[$player->getDisplayName()] = $this->pets[$player->getDisplayName()]->getName();
@@ -214,11 +214,11 @@ class Main extends PluginBase implements Listener {
      * @return boolean        Whether or not the removal was successful
      */
     public function removePet($user = '', $unset = false) {
-        if(($player = $this->getServer()->getPlayerExact($user)) instanceof Player) {
-            if(isset($this->pets[$player->getDisplayName()])) {
+        if (($player = $this->getServer()->getPlayerExact($user)) instanceof Player) {
+            if (isset($this->pets[$player->getDisplayName()])) {
                 $this->pets[$player->getDisplayName()]->fastClose();
                 unset($this->pets[$player->getDisplayName()]);
-                if($unset) {
+                if ($unset) {
                     unset($this->players[$player->getDisplayName()]);
                 }
                 return true;
@@ -234,8 +234,8 @@ class Main extends PluginBase implements Listener {
      * @return boolean      Whether the find was successful
      */
     public function findPet($user = '') {
-        if(($player = $this->getServer()->getPlayerExact($user)) instanceof Player) {
-            if(isset($this->pets[$player->getDisplayName()])) {
+        if (($player = $this->getServer()->getPlayerExact($user)) instanceof Player) {
+            if (isset($this->pets[$player->getDisplayName()])) {
                 $this->pets[$player->getDisplayName()]->returnToOwner();
                 return true;
             }
@@ -248,10 +248,11 @@ class Main extends PluginBase implements Listener {
      *
      * @return null
      */
-    public function onDisable() : void{
+    public function onDisable() : void {
         $this->getConfig()->set('users', $this->players);
         $this->getConfig()->save();
 
         $this->getLogger()->info(TextFormat::DARK_RED . "Disabled");
     }
+
 }
